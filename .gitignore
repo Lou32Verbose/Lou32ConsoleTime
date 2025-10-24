@@ -1,0 +1,23 @@
+# Compiled executables
+*.exe
+
+# Object files
+*.obj
+
+# Visual Studio build artifacts
+*.pdb
+*.ilk
+*.idb
+*.exp
+*.lib
+
+# Visual Studio temporary files
+*.log
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Copilot Instructions
+.github/
