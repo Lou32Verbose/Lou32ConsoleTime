@@ -280,7 +280,7 @@ static void PrintTitleLine(void) {
     
     const WORD titleBackgroundAttribute = BACKGROUND_RED | BACKGROUND_GREEN | 
                                           BACKGROUND_BLUE | BACKGROUND_INTENSITY;
-    const WORD titleTextAttribute = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+    const WORD titleTextAttribute = FOREGROUND_BLUE;
     const WORD normalAttribute = FOREGROUND_RED | FOREGROUND_GREEN | 
                                  FOREGROUND_BLUE;
     
