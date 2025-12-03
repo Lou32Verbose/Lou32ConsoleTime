@@ -280,13 +280,20 @@ static void UpdateCharPosition(
                 charsToWrite = csbi.dwSize.X - x;
             }
             
-            for (int i = 0; i < charsToWrite; i++) {
-                fputwc(current[i], stdout);
+            if (charsToWrite > 0) {
+                // Use WriteConsoleOutputCharacterW for direct, unbuffered output
+                COORD writePos = { x, currentY };
+                DWORD charsWritten;
+                WriteConsoleOutputCharacterW(
+                    g_hConsole,
+                    current,
+                    charsToWrite,
+                    writePos,
+                    &charsWritten
+                );
             }
-        }
     }
     fflush(stdout);
-}
 
 // Update character position only if it has changed
 static void UpdateCharPositionIfChanged(
@@ -1050,8 +1057,29 @@ int wmain(int argc, wchar_t* argv[]) {
     // Initialize console size tracking
     CheckConsoleResize();
 
-    // Initial screen setup
-    ClearScreenSafe();
+    // Initial screen setup - clear entire screen first
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if (GetConsoleScreenBufferInfo(g_hConsole, &csbi)) {
+        DWORD dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+        COORD coordScreen = { 0, 0 };
+        DWORD cCharsWritten;
+        
+        FillConsoleOutputCharacterW(
+            g_hConsole, 
+            L' ', 
+            dwConSize, 
+            coordScreen, 
+            &cCharsWritten
+        );
+        FillConsoleOutputAttribute(
+            g_hConsole, 
+            csbi.wAttributes, 
+            dwConSize, 
+            coordScreen, 
+            &cCharsWritten
+        );
+    }
+    
     PrintTitleLine();
 
     SYSTEMTIME st;
@@ -1109,4 +1137,3 @@ int wmain(int argc, wchar_t* argv[]) {
 
     HideCursor(FALSE);
     return 0;
-}
